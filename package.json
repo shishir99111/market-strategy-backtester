@@ -1,0 +1,43 @@
+{
+  "name": "market-strategy-backtester",
+  "version": "1.0.0",
+  "description": "A implementation for testing market trading automation with the historical data",
+  "main": "index.js",
+  "scripts": {
+    "debug": "nodemon --inspect=5860 index.js",
+    "test": "testing=true node index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shishir99111/market-strategy-backtester.git"
+  },
+  "keywords": [
+    "Nodejs",
+    "Socketio"
+  ],
+  "author": "Shishir Sonekar <https://www.linkedin.com/in/shishir-sonekar-2a1843125/> ",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shishir99111/socket-io-stockmarket/issues"
+  },
+  "homepage": "https://github.com/shishir99111/socket-io-stockmarket#readme",
+  "devDependencies": {
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-plugin-import": "^2.7.0",
+    "pre-commit": "1.2.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "kiteconnect": "^1.2.2",
+    "mongoose": "^4.13.6",
+    "mongoose-auto-increment": "^5.0.1",
+    "morgan": "^1.9.0",
+    "pino": "^4.10.2",
+    "socket.io": "^1.7.4"
+  }
+}
