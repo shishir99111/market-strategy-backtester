@@ -2,60 +2,96 @@
 <html>
 
 <head>
-    <title>Socket.IO chat</title>
+    <title>Market Strategy Backtester</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 </head>
 
 <body>
     <div class="row" style="margin-top: 100px">
         <div class="col-md-6 offset-md-3">
-            <div class="card" style="width: 20rem;">
+            <div class="card" style="width: 50rem;">
                 <div class="card-body">
-                    <h4 class="card-title">Ticker</h4>
-                    <p class="card-text">Authenticate and embrace your Price Ticker.</p>
+                    <h4 class="card-title">Upload Historical Data</h4>
+                    <p class="card-text">Upload and check your Strategy.</p>
                 </div>
                 <div class="card-body">
-                    <a class="card-link" href="https://kite.zerodha.com/connect/login?api_key=<%=apiKey%>">Authorize Zerodha</a>
-                    <a class="card-link" id="start" href="#">Start Ticker</a>
+                    <form name="uploadFile" class="upload-file-form" method="POST" enctype="multipart/form-data">
+                        <!-- <input type="hidden" id='input-account' name="accounts"> -->
+                        <div class="form-group inputDnD">
+                            <input type="file" name="datafile" id="inputFile" accept=".xlsx" onchange="allowOnlyXlsx(this);">
+                        </div>
+                    </form>
                 </div>
-                <ul id="info" class="list-group list-group-flush">
-                    <li class="list-group-item">Please wait</li>
-                    <li class="list-group-item">Loading data</li>
-                    <li class="list-group-item">!!...</li>
-                </ul>
+                <ul id="info" class="list-group list-group-flush"></ul>
             </div>
         </div>
     </div>
 </body>
 
+<script src="https://code.jquery.com/jquery-3.1.1.min.js">
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 <script>
+        var isAjax = false;
+        
         $(function() {
-            // create connection
-            $('#start').click(()=>{
-                var socket = io();
-                // ticker
-                socket.on('tick', function(tick) {
-                    console.log(tick);
-                    $('#info').html('');
-                    for(var key in tick){
-                        if (tick.hasOwnProperty(key)) {
-                            const val = tick;
-                            if(tick[key] instanceof Object || tick[key] instanceof Array) continue;
-                            $('#info').append(
-                                $('<li>').attr('class', 'list-group-item').append(
-                                    $('<span>').attr('class', 'tab').append(key + ' : ' + tick[key])
-                                )
-                            );
+            hideProgressBar();
+            $('#upload-excel').click(function() {
+
+                $("#filename").val('');
+                if (!isAjax) {
+                    hideProgressBar();
+                }
+            });
+
+            $('form').submit(function(e) {
+                $('#upload').modal('close');
+                isAjax = true;
+                var formData = new FormData($(this)[0]);
+                var confirmation = confirm("Are you sure?");
+                if (confirmation) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/historical-data',
+                        data: formData,
+                        contentType: false,
+                        processData: false
+                    }).done(function(data) {
+                        swal("File Uploaded");
+                        isAjax = false;
+                    }).fail(function(err) {
+                        if (err) {
+                            alert(err.message);
                         }
-                    }
-                    // window.scrollTo(0, document.body.scrollHeight);
-                });
+                    });
+                } else {
+                        location.reload();
+                }
+            e.preventDefault();
             });
         });
+        
+        //entry function
+        function allowOnlyXlsx(sender) {
+            showProgressBar();
+            var validExts = new Array(".xlsx");
+            var fileExt = sender.value;
+            fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+            if (validExts.indexOf(fileExt) < 0) {
+                alert("Invalid file selected, valid files are of " + validExts.toString() + " types.");
+                return false;
+            } else {
+                $('form').submit();
+            }
+        }
+        function hideProgressBar() {
+            $('.progress').hide();
+        }
+
+        function showProgressBar() {
+            $('.progress').show();
+        }
 </script>
 
 </html>
