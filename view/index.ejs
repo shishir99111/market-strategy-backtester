@@ -59,11 +59,10 @@
                         processData: false
                     }).done(function(data) {
                         swal("File Uploaded");
+                        console.log(data.length);
                         isAjax = false;
                     }).fail(function(err) {
-                        if (err) {
-                            alert(err.message);
-                        }
+                        alert(err.message);
                     });
                 } else {
                         location.reload();

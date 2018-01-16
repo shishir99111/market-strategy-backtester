@@ -1,4 +1,6 @@
-const uploadHistoricalData = require('./uploadHistoricalData.handler');
+const uploadHistoricalData = require('./processHistoricalData.handler');
+
+const multer = rootRequire('web/middleware/multer');
 
 /**
  * Mounts component specific routes,
@@ -6,5 +8,5 @@ const uploadHistoricalData = require('./uploadHistoricalData.handler');
  * @param {object} router
  */
 module.exports = (router) => {
-  router.post('/historical-data', uploadHistoricalData);
+  router.post('/historical-data', multer.historyData, uploadHistoricalData);
 };
