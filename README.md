@@ -1,5 +1,7 @@
 ## Market Strategy Backtester
 
+[![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 - A implementation for testing market trading automation with the historical data.
 
 ## Requirements
