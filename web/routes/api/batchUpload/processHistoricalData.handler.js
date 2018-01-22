@@ -2,7 +2,12 @@ const co = require('co');
 const Boom = require('boom');
 
 const { processXlsx } = rootRequire('service');
-const logic = rootRequire('strategies/deviation');
+const logic = rootRequire('strategies/deviationThreshold.strategy');
+
+const THRESHOLD = {
+  call: 5,
+  put: 5,
+};
 
 /**
  * Processes:
@@ -18,16 +23,17 @@ const logic = rootRequire('strategies/deviation');
 function* handler(req, res) {
   if (req.file !== undefined) {
     try {
-      const threshold = req.body.threshold || 5;
+      const threshold = req.body.threshold || THRESHOLD;
       const worksheet = yield processXlsx({
         path: '/uploads/',
         filename: req.file.filename,
       }, ['Call Data', 'Put Data']);
-      // making validation requests for validation
+
       const result = logic(worksheet, threshold);
+
       return result;
     } catch (e) {
-      logger.error(`Error parsing XLSX ${err}`);
+      logger.error(`Error parsing XLSX ${e}`);
       return Boom.badRequest(e);
     }
   } else {
