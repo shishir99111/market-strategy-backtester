@@ -23,7 +23,13 @@ const THRESHOLD = {
 function* handler(req, res) {
   if (req.file !== undefined) {
     try {
-      const threshold = req.body.threshold || THRESHOLD;
+      let threshold = THRESHOLD;
+      if (req.body.call_threshold && req.body.put_threshold) {
+        threshold = {
+          call: req.body.call_threshold,
+          put: req.body.put_threshold,
+        };
+      }
       const worksheet = yield processXlsx({
         path: '/uploads/',
         filename: req.file.filename,

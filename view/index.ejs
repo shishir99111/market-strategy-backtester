@@ -4,39 +4,73 @@
 <head>
     <title>Market Strategy Backtester</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 </head>
 
 <body>
-    <div class="row" style="margin-top: 100px">
-        <div class="col-md-6 offset-md-3">
-            <div class="card" style="width: 50rem;">
-                <div class="card-body">
-                    <h4 class="card-title">Upload Historical Data</h4>
-                    <p class="card-text">Upload and check your Strategy.</p>
+    <div>
+        <div class="row" style="margin-top: 100px">
+            <div class="col-md-6 offset-md-3">
+                <div class="card" style="width: 50rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">Upload Historical Data</h4>
+                        <p class="card-text">Upload and check your Strategy.</p>
+                    </div>
+                    <div class="card-body">
+                        <form name="uploadFile" class="upload-file-form" method="POST" enctype="multipart/form-data">
+                            <input type="number" id='call_threshold' name="call_threshold" placeholder="Enter Call Threshold">
+                            <input type="number" id='put_threshold' name="put_threshold" placeholder="Enter Put Threshold">
+                            <div class="form-group inputDnD">
+                                <input type="file" name="datafile" id="inputFile" accept=".xlsx" onchange="allowOnlyXlsx(this);">
+                            </div>
+                        </form>
+                    </div>
+                    <ul id="info" class="list-group list-group-flush"></ul>
                 </div>
-                <div class="card-body">
-                    <form name="uploadFile" class="upload-file-form" method="POST" enctype="multipart/form-data">
-                        <!-- <input type="hidden" id='input-account' name="accounts"> -->
-                        <div class="form-group inputDnD">
-                            <input type="file" name="datafile" id="inputFile" accept=".xlsx" onchange="allowOnlyXlsx(this);">
-                        </div>
-                    </form>
-                </div>
-                <ul id="info" class="list-group list-group-flush"></ul>
             </div>
+        </div>
+    </div>
+    <div style="margin-left: 200px;margin-top: 50px">
+        <div class="row">
+        <table id="callTable" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Date Time</th>
+                    <th>Bid</th>
+                    <th>Offer</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <table id="putTable" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Date Time</th>
+                    <th>Bid</th>
+                    <th>Offer</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
         </div>
     </div>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js">
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script>
         var isAjax = false;
         
         $(function() {
             hideProgressBar();
+
+            var callTable = $('#callTable').DataTable({"zeroRecords": ""});
+            var putTable = $('#putTable').DataTable({"zeroRecords": ""});
+
             $('#upload-excel').click(function() {
 
                 $("#filename").val('');
@@ -49,6 +83,8 @@
                 $('#upload').modal('close');
                 isAjax = true;
                 var formData = new FormData($(this)[0]);
+                // formData.append('callThreshold', $('#call_threshold').val());
+                // formData.append('putThreshold', $('#call_threshold').val());
                 var confirmation = confirm("Are you sure?");
                 if (confirmation) {
                     $.ajax({
@@ -58,8 +94,25 @@
                         contentType: false,
                         processData: false
                     }).done(function(data) {
-                        swal("File Uploaded");
-                        console.log(data.length);
+                        alert("File Uploaded");
+
+                        for(i=0 ; i<data.callResult.length ; i++){
+                            $('#callTable tbody').after(`
+                                <tr class="child">
+                                    <td>${data.callResult[i].Time}<\/td>
+                                    <td>${data.callResult[i].Bid}<\/td>
+                                    <td>${data.callResult[i].Offer}<\/td>
+                                </tr>`);
+                        }
+
+                        for(i=0 ; i<data.putResult.length ; i++){
+                            $('#putTable tbody').after(`
+                                <tr class="child">
+                                    <td>${data.putResult[i].Time}<\/td>
+                                    <td>${data.putResult[i].Bid}<\/td>
+                                    <td>${data.putResult[i].Offer}<\/td>
+                                </tr>`);
+                        }
                         isAjax = false;
                     }).fail(function(err) {
                         alert(err.message);
