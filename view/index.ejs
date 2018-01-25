@@ -5,55 +5,76 @@
     <title>Market Strategy Backtester</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-    <div>
-        <div class="row" style="margin-top: 100px">
-            <div class="col-md-6 offset-md-3">
-                <div class="card" style="width: 50rem;">
-                    <div class="card-body">
-                        <h4 class="card-title">Upload Historical Data</h4>
-                        <p class="card-text">Upload and check your Strategy.</p>
-                    </div>
-                    <div class="card-body">
-                        <form name="uploadFile" class="upload-file-form" method="POST" enctype="multipart/form-data">
-                            <input type="number" id='call_threshold' name="call_threshold" placeholder="Enter Call Threshold">
-                            <input type="number" id='put_threshold' name="put_threshold" placeholder="Enter Put Threshold">
-                            <div class="form-group inputDnD">
-                                <input type="file" name="datafile" id="inputFile" accept=".xlsx" onchange="allowOnlyXlsx(this);">
+    <div class="container">
+        <div class="row main">
+            <div class="main-login main-center">
+            <h5>Market Strategy Backtester</h5>
+            <p>Upload and check your Strategy.</p>
+                <form class="" method="post" action="#">
+                    
+                    <div class="form-group">
+                        <label for="call_threshold" class="cols-sm-2 control-label">Call Threshold</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-genderless fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="call_threshold" id="call_threshold"  placeholder="Enter Call Threshold"/>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                    <ul id="info" class="list-group list-group-flush"></ul>
-                </div>
+
+                    <div class="form-group">
+                        <label for="put_threshold" class="cols-sm-2 control-label">Put Threshold</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-genderless fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="put_threshold" id="put_threshold"  placeholder="Enter Put Threshold"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <input type="file" name="datafile" id="inputFile" accept=".xlsx" onchange="allowOnlyXlsx(this);" type="button" id="button" class="btn btn-primary btn-lg btn-block"></input>
+                    </div>
+
+                    <div class="form-group ">
+                        <a target="_blank" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Register</a>
+                    </div>
+                    
+                </form>
             </div>
         </div>
     </div>
     <div style="margin-left: 200px;margin-top: 50px">
         <div class="row">
-        <table id="callTable" class="display" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Date Time</th>
-                    <th>Bid</th>
-                    <th>Offer</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        <table id="putTable" class="display" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Date Time</th>
-                    <th>Bid</th>
-                    <th>Offer</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+            <table id="callTable" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Date Time</th>
+                        <th>Bid</th>
+                        <th>Offer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <table id="putTable" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Date Time</th>
+                        <th>Bid</th>
+                        <th>Offer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
@@ -64,12 +85,11 @@
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script>
         var isAjax = false;
-        
         $(function() {
             hideProgressBar();
 
-            var callTable = $('#callTable').DataTable({"zeroRecords": ""});
-            var putTable = $('#putTable').DataTable({"zeroRecords": ""});
+            var callTable = $('#callTable').DataTable({"ordering": false});
+            var putTable = $('#putTable').DataTable({"ordering": false});
 
             $('#upload-excel').click(function() {
 
@@ -94,25 +114,9 @@
                         contentType: false,
                         processData: false
                     }).done(function(data) {
-                        alert("File Uploaded");
-
-                        for(i=0 ; i<data.callResult.length ; i++){
-                            $('#callTable tbody').after(`
-                                <tr class="child">
-                                    <td>${data.callResult[i].Time}<\/td>
-                                    <td>${data.callResult[i].Bid}<\/td>
-                                    <td>${data.callResult[i].Offer}<\/td>
-                                </tr>`);
-                        }
-
-                        for(i=0 ; i<data.putResult.length ; i++){
-                            $('#putTable tbody').after(`
-                                <tr class="child">
-                                    <td>${data.putResult[i].Time}<\/td>
-                                    <td>${data.putResult[i].Bid}<\/td>
-                                    <td>${data.putResult[i].Offer}<\/td>
-                                </tr>`);
-                        }
+                        alert("Successfully Processed");
+                        renderData(data.callResult, 'callTable');
+                        renderData(data.putResult, 'putTable');
                         isAjax = false;
                     }).fail(function(err) {
                         alert(err.message);
@@ -143,6 +147,17 @@
 
         function showProgressBar() {
             $('.progress').show();
+        }
+
+        function renderData(data, id){
+            for(i=0 ; i<data.length ; i++){
+                $(`#${id} tbody`).before(`
+                    <tr class="child">
+                        <td>${data[i].Time}<\/td>
+                        <td>${data[i].Bid}<\/td>
+                        <td>${data[i].Offer}<\/td>
+                    </tr>`);
+            }
         }
 </script>
 

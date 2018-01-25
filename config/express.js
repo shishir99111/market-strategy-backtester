@@ -5,10 +5,12 @@
 const express = require('express');
 
 const app = express();
+
 module.exports = () => {
   // disabled for security reasons
   app.disable('x-powered-by');
   app.set('etag', false);
 
+  app.use(express.static('./view'));
   return app;
 };

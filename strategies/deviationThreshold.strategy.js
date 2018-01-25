@@ -3,14 +3,17 @@ const Boom = require('boom');
 const errorPoint = 0.0;
 
 function isThresholdCrossed(val, basePoint, threshold) {
-  return val['Offer'] >= ((basePoint['Offer'] + threshold) - errorPoint) ||
-    val['Offer'] >= ((basePoint['Bid'] + threshold) - errorPoint) ||
-    val['Offer'] <= ((basePoint['Offer'] - threshold) + errorPoint) ||
-    val['Offer'] <= ((basePoint['Bid'] - threshold) + errorPoint) ||
-    val['Bid'] >= ((basePoint['Offer'] + threshold) - errorPoint) ||
-    val['Bid'] >= ((basePoint['Bid'] + threshold) - errorPoint) ||
-    val['Bid'] <= ((basePoint['Offer'] - threshold) + errorPoint) ||
-    val['Bid'] <= ((basePoint['Bid'] - threshold) + errorPoint);
+  // const _val = Number(val);
+  // const _basePoint = Number(basePoint);
+  // const +threshold = Number(threshold);
+  return +val['Offer'] >= ((+basePoint['Offer'] + +threshold) - errorPoint) ||
+    +val['Offer'] >= ((+basePoint['Bid'] + +threshold) - errorPoint) ||
+    +val['Offer'] <= ((+basePoint['Offer'] - +threshold) + errorPoint) ||
+    +val['Offer'] <= ((+basePoint['Bid'] - +threshold) + errorPoint) ||
+    +val['Bid'] >= ((+basePoint['Offer'] + +threshold) - errorPoint) ||
+    +val['Bid'] >= ((+basePoint['Bid'] + +threshold) - errorPoint) ||
+    +val['Bid'] <= ((+basePoint['Offer'] - +threshold) + errorPoint) ||
+    +val['Bid'] <= ((+basePoint['Bid'] - +threshold) + errorPoint);
 }
 
 function findThresholdTicks(data, threshold) {
