@@ -4,17 +4,6 @@ const Boom = require('boom');
 const { processXlsx } = rootRequire('service');
 const logic = rootRequire('strategies/deviationThreshold.strategy');
 
-const THRESHOLD = {
-  call: {
-    lower: 5,
-    upper: 5,
-  },
-  put: {
-    lower: 5,
-    upper: 5,
-  },
-};
-
 /**
  * Processes:
  * - saves to batch collection, only unique combined with client has to be saved
@@ -29,19 +18,17 @@ const THRESHOLD = {
 function* handler(req, res) {
   if (req.file !== undefined) {
     try {
-      let threshold = THRESHOLD;
-      if (req.body.call_threshold && req.body.put_threshold) {
-        threshold = {
-          call: {
-            upper: req.body.upper_call_threshold,
-            lower: req.body.lower_call_threshold,
-          },
-          put: {
-            upper: req.body.upper_put_threshold,
-            lower: req.body.lower_put_threshold,
-          },
-        };
-      }
+      // need to add Joi validation
+      const threshold = {
+        call: {
+          upper: req.body.upper_call_threshold,
+          lower: req.body.lower_call_threshold,
+        },
+        put: {
+          upper: req.body.upper_put_threshold,
+          lower: req.body.lower_put_threshold,
+        },
+      };
       const worksheet = yield processXlsx({
         path: '/uploads/',
         filename: req.file.filename,

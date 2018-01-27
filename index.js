@@ -1,6 +1,6 @@
 require('dotenv').config();
 require('./globals');
-require('./config/mongoose').init();
+// require('./config/mongoose').init();
 
 const {
   app,
