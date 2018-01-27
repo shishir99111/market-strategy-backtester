@@ -192,12 +192,11 @@
             for(i=0 ; i<data.length ; i++){
                 $(`#${id} tbody`).before(`
                     <tr class="child">
-                        <td>${moment.format('HH:mm:ss')}<\/td>
+                        <td>${moment(data[i].Time).format('HH:mm:ss')}<\/td>
                         <td>${data[i].Bid}<\/td>
                         <td>${data[i].Offer}<\/td>
                         <td>${data[i].Type}<\/td>
                     </tr>`);
-                    // .tz(data[i].Time, 'Asia/Kolkata')
             }
         }
 </script>
