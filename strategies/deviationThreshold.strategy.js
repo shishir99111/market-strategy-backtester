@@ -2,16 +2,16 @@ const Boom = require('boom');
 
 const errorPoint = 0.0;
 
-function isThresholdCrossed(val, basePoint, threshold) {
-  // const _val = Number(val);
-  // const _basePoint = Number(basePoint);
-  // const +threshold = Number(threshold);
+function isUpperThresholdCrossed(val, basePoint, threshold) {
   return +val['Offer'] >= ((+basePoint['Offer'] + +threshold) - errorPoint) ||
     +val['Offer'] >= ((+basePoint['Bid'] + +threshold) - errorPoint) ||
-    +val['Offer'] <= ((+basePoint['Offer'] - +threshold) + errorPoint) ||
-    +val['Offer'] <= ((+basePoint['Bid'] - +threshold) + errorPoint) ||
     +val['Bid'] >= ((+basePoint['Offer'] + +threshold) - errorPoint) ||
-    +val['Bid'] >= ((+basePoint['Bid'] + +threshold) - errorPoint) ||
+    +val['Bid'] >= ((+basePoint['Bid'] + +threshold) - errorPoint);
+}
+
+function isLowerThresholdCrossed(val, basePoint, threshold) {
+  return +val['Offer'] <= ((+basePoint['Offer'] - +threshold) + errorPoint) ||
+    +val['Offer'] <= ((+basePoint['Bid'] - +threshold) + errorPoint) ||
     +val['Bid'] <= ((+basePoint['Offer'] - +threshold) + errorPoint) ||
     +val['Bid'] <= ((+basePoint['Bid'] - +threshold) + errorPoint);
 }
@@ -19,9 +19,17 @@ function isThresholdCrossed(val, basePoint, threshold) {
 function findThresholdTicks(data, threshold) {
   const result = [];
   let basePoint = data[0];
+  let positiveCount = 0;
+  let negativeCount = 0;
   for (let i = 0; i < data.length; i++) {
-    const assert = isThresholdCrossed(data[i], basePoint, threshold);
-    if (assert) {
+    const positiveAssert = isUpperThresholdCrossed(data[i], basePoint, threshold.upper);
+    const negativeAssert = isLowerThresholdCrossed(data[i], basePoint, threshold.lower);
+    if (positiveAssert) {
+      data[i].Type = `PC${positiveCount += 1}`;
+      result.push(data[i]);
+      basePoint = data[i];
+    } else if (negativeAssert) {
+      data[i].Type = `NC${negativeCount += 1}`;
       result.push(data[i]);
       basePoint = data[i];
     }

@@ -5,8 +5,14 @@ const { processXlsx } = rootRequire('service');
 const logic = rootRequire('strategies/deviationThreshold.strategy');
 
 const THRESHOLD = {
-  call: 5,
-  put: 5,
+  call: {
+    lower: 5,
+    upper: 5,
+  },
+  put: {
+    lower: 5,
+    upper: 5,
+  },
 };
 
 /**
@@ -26,8 +32,14 @@ function* handler(req, res) {
       let threshold = THRESHOLD;
       if (req.body.call_threshold && req.body.put_threshold) {
         threshold = {
-          call: req.body.call_threshold,
-          put: req.body.put_threshold,
+          call: {
+            upper: req.body.upper_call_threshold,
+            lower: req.body.lower_call_threshold,
+          },
+          put: {
+            upper: req.body.upper_put_threshold,
+            lower: req.body.lower_put_threshold,
+          },
         };
       }
       const worksheet = yield processXlsx({

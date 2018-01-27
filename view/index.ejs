@@ -20,21 +20,41 @@
                 <form class="" method="post" action="#">
                     
                     <div class="form-group">
-                        <label for="call_threshold" class="cols-sm-2 control-label">Call Threshold</label>
+                        <label for="upper_call_threshold" class="cols-sm-2 control-label">Upper Call Threshold</label>
                         <div class="cols-sm-10">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-genderless fa" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control" name="call_threshold" id="call_threshold"  placeholder="Enter Call Threshold"/>
+                                <input type="text" class="form-control" name="upper_call_threshold" id="upper_call_threshold"  placeholder="Enter Upper Call Threshold"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lower_call_threshold" class="cols-sm-2 control-label">Lower Call Threshold</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-genderless fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="lower_call_threshold" id="lower_call_threshold"  placeholder="Enter Lower Call Threshold"/>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="put_threshold" class="cols-sm-2 control-label">Put Threshold</label>
+                        <label for="upper_put_threshold" class="cols-sm-2 control-label">Upper Put Threshold</label>
                         <div class="cols-sm-10">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-genderless fa" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control" name="put_threshold" id="put_threshold"  placeholder="Enter Put Threshold"/>
+                                <input type="text" class="form-control" name="upper_put_threshold" id="upper_put_threshold"  placeholder="Enter Upper Put Threshold"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lower_put_threshold" class="cols-sm-2 control-label">Lower Put Threshold</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-genderless fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="lower_put_threshold" id="lower_put_threshold"  placeholder="Enter Lower Put Threshold"/>
                             </div>
                         </div>
                     </div>
@@ -44,7 +64,7 @@
                     </div>
 
                     <div class="form-group ">
-                        <a target="_blank" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Register</a>
+                        <a target="_blank" type="submit" id="button" class="btn btn-primary btn-lg btn-block login-button" onclick="submit()" >Register</a>
                     </div>
                     
                 </form>
@@ -53,28 +73,36 @@
     </div>
     <div style="margin-left: 200px;margin-top: 50px">
         <div class="row">
-            <table id="callTable" class="display" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>Date Time</th>
-                        <th>Bid</th>
-                        <th>Offer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <table id="putTable" class="display" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>Date Time</th>
-                        <th>Bid</th>
-                        <th>Offer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <div>
+                <p style="text-align:center">Call Data</p>
+                <table id="callTable" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date Time</th>
+                            <th>Bid</th>
+                            <th>Offer</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <p style="text-align:center">Put Data</p>
+                <table id="putTable" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date Time</th>
+                            <th>Bid</th>
+                            <th>Offer</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </body>
@@ -100,7 +128,6 @@
             });
 
             $('form').submit(function(e) {
-                $('#upload').modal('close');
                 isAjax = true;
                 var formData = new FormData($(this)[0]);
                 // formData.append('callThreshold', $('#call_threshold').val());
@@ -115,6 +142,11 @@
                         processData: false
                     }).done(function(data) {
                         alert("Successfully Processed");
+                        
+                        // clears data
+                        $('form').find("input[type=text],input[type=file]").val("");
+                        
+                        // render data in Table
                         renderData(data.callResult, 'callTable');
                         renderData(data.putResult, 'putTable');
                         isAjax = false;
@@ -137,10 +169,14 @@
             if (validExts.indexOf(fileExt) < 0) {
                 alert("Invalid file selected, valid files are of " + validExts.toString() + " types.");
                 return false;
-            } else {
-                $('form').submit();
             }
+            return true;
         }
+
+        function submit(){
+            $('form').submit();
+        }
+
         function hideProgressBar() {
             $('.progress').hide();
         }
@@ -156,6 +192,7 @@
                         <td>${data[i].Time}<\/td>
                         <td>${data[i].Bid}<\/td>
                         <td>${data[i].Offer}<\/td>
+                        <td>${data[i].Type}<\/td>
                     </tr>`);
             }
         }
