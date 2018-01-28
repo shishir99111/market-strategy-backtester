@@ -34,4 +34,6 @@ ZERODHA_USER_ID=<YOUR ZERODHA USER ID>
 
 # Todo:
 
-- Excel upload for the historical data, in the stadard format provided by zerodha portal.
+- Provide Sample Data File.
+- Exit Strategy for DeviationThreshold Strategy.
+- Validation for inputs.
