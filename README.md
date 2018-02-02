@@ -35,5 +35,10 @@ ZERODHA_USER_ID=<YOUR ZERODHA USER ID>
 # Todo:
 
 - Provide Sample Data File.
-- Exit Strategy for DeviationThreshold Strategy.
 - Validation for inputs.
+- DeviationThreshold Strategy.
+    - Exit Strategy.
+    - Frequency Calculations.
+    - Bidirectional Structure. i.e.
+    reversal in case of consequitive negatives and push back to original state when again consequitive positive comes.
+    Whole motive is to reduce the negative calls and increase positive.
