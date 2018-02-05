@@ -2,12 +2,12 @@
 
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-- A implementation for testing market trading automation with the historical data.
+- An Implementation for testing market trading automation strategy with the historical data. 
+    PS: Originaly built to revive my trading strategy.
 
 ## Requirements
 
 - Nodejs ^v8.9.0
-- MongoDB
 
 ## Installation
 
@@ -36,6 +36,7 @@ ZERODHA_USER_ID=<YOUR ZERODHA USER ID>
 
 - Provide Sample Data File.
 - Validation for inputs.
+- Data from Zerodha
 - DeviationThreshold Strategy.
     - Exit Strategy.
     - Frequency Calculations.
