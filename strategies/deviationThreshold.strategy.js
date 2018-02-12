@@ -16,14 +16,14 @@ function isLowerThresholdCrossed(val, basePoint, threshold) {
     +val['Bid'] <= ((+basePoint['Bid'] - +threshold) + errorPoint);
 }
 
-function findThresholdTicks(data, threshold) {
+function findThresholdTicks(data, input) {
   const result = [];
   let basePoint = data[0];
   let positiveCount = 0;
   let negativeCount = 0;
   for (let i = 0; i < data.length; i++) {
-    const positiveAssert = isUpperThresholdCrossed(data[i], basePoint, threshold.upper);
-    const negativeAssert = isLowerThresholdCrossed(data[i], basePoint, threshold.lower);
+    const positiveAssert = isUpperThresholdCrossed(data[i], basePoint, input.upper);
+    const negativeAssert = isLowerThresholdCrossed(data[i], basePoint, input.lower);
     if (positiveAssert) {
       data[i].Type = `PC${positiveCount += 1}`;
       result.push(data[i]);
