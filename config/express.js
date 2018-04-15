@@ -13,7 +13,7 @@ module.exports = () => {
 
   app.use(express.static('./view'));
 
-  app.get(['/favicon.ico', '/robot.txt'], (req, res) => { res.status(204); });
+  app.get(['/favicon.ico', '/robots.txt'], (req, res) => { res.status(204); });
 
   return app;
 };
