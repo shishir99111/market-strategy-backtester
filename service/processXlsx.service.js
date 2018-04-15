@@ -18,7 +18,7 @@ module.exports = (input, sheetNames) => {
       });
       return resolve(worksheets);
     } catch (err) {
-      return Boom.badRequest(err);
+      throw Boom.badRequest(err);
     }
   });
 };
