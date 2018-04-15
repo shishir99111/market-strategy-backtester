@@ -16,7 +16,7 @@ function getUserInputObj(body) {
     },
     consequitive_count: {
       positive: body.positive_consequitive_count,
-      negative: body.positive_consequitive_count,
+      negative: body.negative_consequitive_count,
     },
   };
 }
@@ -48,7 +48,7 @@ function* handler(req, res) {
       return result;
     } catch (e) {
       logger.error(`Error parsing XLSX ${e}`);
-      return Boom.badRequest(e);
+      throw Boom.badRequest(e);
     }
   } else {
     logger.error('Unable to upload file');
