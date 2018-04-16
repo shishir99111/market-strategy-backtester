@@ -28,7 +28,9 @@ function postIterationAnalysis(config, data) {
   if (data.Trend === TREND['POSITIVE'] && config.prevTrend === TREND['POSITIVE']) {
     config.lotSizeX = 2;
   }
-  if (data.Trend === TREND['NEGATIVE'] && config.prevTrend === TREND['POSITIVE']) config.lotSizeX = 1;
+  if (data.Trend === TREND['NEGATIVE'] && config.prevTrend === TREND['NEGATIVE']) {
+    config.lotSizeX = 1;
+  }
   return config;
 }
 
