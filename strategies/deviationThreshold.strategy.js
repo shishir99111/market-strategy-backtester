@@ -30,6 +30,7 @@ function postIterationAnalysis(config, data) {
   }
   if (data.Trend === TREND['NEGATIVE'] && config.prevTrend === TREND['NEGATIVE']) {
     config.lotSizeX = 1;
+    config.TrendNeutral = 1;
   }
   return config;
 }
@@ -49,6 +50,8 @@ function findThresholdTicks(data, input) {
     const negativeAssert = isLowerThresholdCrossed(data[i], basePoint, input.lower);
 
     config = preIterationAnalysis(config, data[i - 1] || data[0]);
+
+    data[i].NoOfOrders = config.lotSizeX;
 
     if (positiveAssert) {
       data[i].Type = `${PREFIX['POSITIVE']}${positiveCount += config.lotSizeX}`;
