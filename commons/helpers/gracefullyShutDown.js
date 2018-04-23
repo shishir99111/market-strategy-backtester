@@ -21,15 +21,15 @@ module.exports = (appServer) => {
         logger.info('Shutting Down');
         process.exit(0);
       }
-    })
-  }
+    });
+  };
 
   // listen for TERM signal .e.g. kill
-  process.on('SIGTERM', gracefulShutdown)
+  process.on('SIGTERM', gracefulShutdown);
 
   // listen for INT signal e.g. Ctrl-C
-  process.on('SIGINT', gracefulShutdown)
+  process.on('SIGINT', gracefulShutdown);
 
   // uncaughtException Exception
-  process.on('uncaughtException', gracefulShutdown)
-}
+  process.on('uncaughtException', gracefulShutdown);
+};

@@ -1,5 +1,3 @@
 const processXlsx = require('./processXlsx.service');
 
-module.exports = {
-  processXlsx,
-};
+module.exports = { processXlsx };

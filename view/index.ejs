@@ -125,18 +125,13 @@
             var putTable = $('#putTable').DataTable({"ordering": false});
 
             $('#upload-excel').click(function() {
-
                 $("#filename").val('');
-                if (!isAjax) {
-                    hideProgressBar();
-                }
+                if (!isAjax) hideProgressBar();
             });
 
             $('form').submit(function(e) {
                 isAjax = true;
                 var formData = new FormData($(this)[0]);
-                // formData.append('callThreshold', $('#call_threshold').val());
-                // formData.append('putThreshold', $('#call_threshold').val());
                 var confirmation = confirm("Are you sure?");
                 if (confirmation) {
                     $.ajax({
@@ -147,10 +142,6 @@
                         processData: false
                     }).done(function(data) {
                         alert("Successfully Processed");
-                        
-                        // clears data
-                        // $('form').find("input[type=text],input[type=file]").val("");
-                        
                         // render data in Table
                         renderData(data.callResult, 'callTable');
                         renderData(data.putResult, 'putTable');

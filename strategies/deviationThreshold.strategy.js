@@ -2,6 +2,7 @@ const Boom = require('boom');
 
 const { TREND, PREFIX } = rootRequire('commons/constants');
 
+// error point is not in use now, but considered for the future
 const errorPoint = 0.0;
 
 function isUpperThresholdCrossed(val, basePoint, threshold) {
@@ -56,13 +57,11 @@ function findThresholdTicks(data, input) {
     if (positiveAssert) {
       data[i].Type = `${PREFIX['POSITIVE']}${positiveCount += config.lotSizeX}`;
       data[i].Trend = TREND['POSITIVE'];
-      // config.prevTrend = TREND['POSITIVE'];
       result.push(data[i]);
       basePoint = data[i];
     } else if (negativeAssert) {
       data[i].Type = `${PREFIX['NEGATIVE']}${negativeCount += config.lotSizeX}`;
       data[i].Trend = TREND['NEGATIVE'];
-      // config.prevTrend = TREND['NEGATIVE'];
       result.push(data[i]);
       basePoint = data[i];
     }
