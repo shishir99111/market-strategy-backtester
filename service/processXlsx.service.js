@@ -16,9 +16,9 @@ module.exports = (input, sheetNames) => {
         const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheet], { raw: true });
         worksheets[sheet] = worksheet;
       });
-      return resolve(worksheets);
+      resolve(worksheets);
     } catch (err) {
-      throw Boom.badRequest(err);
+      reject(Boom.badRequest(err));
     }
   });
 };
